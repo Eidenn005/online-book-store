@@ -21,12 +21,12 @@ public class OnlineBookStoreApplication {
     @Bean
     public CommandLineRunner commandLineRunner() {
         return args -> {
-            Book dune = new Book();
-            dune.setTitle("Wizzard rules");
-            dune.setAuthor("Terry Pratchett");
-            dune.setIsbn("147258369");
-            dune.setPrice(BigDecimal.valueOf(500));
-            bookService.save(dune);
+            Book wizzardRules = new Book();
+            wizzardRules.setTitle("Wizzard rules");
+            wizzardRules.setAuthor("Terry Pratchett");
+            wizzardRules.setIsbn("147258369");
+            wizzardRules.setPrice(BigDecimal.valueOf(500));
+            bookService.save(wizzardRules);
             System.out.println(bookService.findAll());
         };
     }

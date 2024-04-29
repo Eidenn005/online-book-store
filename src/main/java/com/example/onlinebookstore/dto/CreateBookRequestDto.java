@@ -2,8 +2,6 @@ package com.example.onlinebookstore.dto;
 
 import java.math.BigDecimal;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
 public class CreateBookRequestDto {

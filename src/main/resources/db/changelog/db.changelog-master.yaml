@@ -1,3 +1,4 @@
 databaseChangeLog:
   - include:
+<<<<<<< HEAD
       file: db/changelog/changes/01-create-book-table.yaml

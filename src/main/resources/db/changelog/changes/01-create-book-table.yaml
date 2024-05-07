@@ -48,5 +48,4 @@ databaseChangeLog:
                   type: bit
                   defaultValueBoolean: false
                   constraints:
-<<<<<<< HEAD
                     nullable: false

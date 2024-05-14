@@ -29,14 +29,10 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
             HttpStatusCode status,
             WebRequest request
     ) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put(TIMESTAMP, LocalDateTime.now());
-        body.put(STATUS, HttpStatus.BAD_REQUEST);
         List<String> errors = ex.getBindingResult().getAllErrors().stream()
                 .map(this::getErrorMessage)
                 .toList();
-        body.put(ERRORS, errors);
-        return new ResponseEntity<>(body, headers, status);
+        return buildResponseEntity(HttpStatus.BAD_REQUEST, errors);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
@@ -65,7 +61,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return e.getDefaultMessage();
     }
 
-    private ResponseEntity<Object> buildResponseEntity(HttpStatus status, String message) {
+    private ResponseEntity<Object> buildResponseEntity(HttpStatus status, Object message) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put(TIMESTAMP, LocalDateTime.now());
         body.put(STATUS, status);

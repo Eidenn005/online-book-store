@@ -10,6 +10,7 @@ import com.example.onlinebookstore.repository.RoleRepository;
 import com.example.onlinebookstore.repository.UserRepository;
 import com.example.onlinebookstore.service.UserService;
 import java.util.Collections;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,9 @@ public class UserServiceImpl implements UserService {
         }
         User user = userMapper.toModel(requestDto);
         user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
-        Role defaultRole = roleRepository.findByRole(Role.RoleName.USER);
+        Optional<Role> optionalRole = roleRepository.findByRole(Role.RoleName.USER);
+        Role defaultRole = optionalRole.orElseThrow(
+                () -> new IllegalStateException("Default role not found"));
         user.setRoles(Collections.singleton(defaultRole));
         User savedUser = userRepository.save(user);
         return userMapper.toDto(savedUser);

@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-users_roles
+      author: Denys Diuimov
+      changes:
+        - insert:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  valueComputed: (SELECT id FROM users WHERE email = 'adminn@gmail.com')
+              - column:
+                  name: role_id
+                  valueComputed: (SELECT id FROM roles WHERE role = 'ADMIN')

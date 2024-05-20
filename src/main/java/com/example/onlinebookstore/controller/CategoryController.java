@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +35,7 @@ public class CategoryController {
     @GetMapping
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @Operation(summary = "Get all categories", description = "Get list of all available categories")
-    public List<CategoryDto> getAll(Pageable pageable) {
+    public List<CategoryDto> getAll(Authentication authentication, Pageable pageable) {
         return categoryService.findAll(pageable);
     }
 

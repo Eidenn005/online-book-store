@@ -5,8 +5,10 @@ import com.example.onlinebookstore.dto.UserResponseDto;
 import com.example.onlinebookstore.exception.RegistrationException;
 import com.example.onlinebookstore.mapper.UserMapper;
 import com.example.onlinebookstore.model.Role;
+import com.example.onlinebookstore.model.ShoppingCart;
 import com.example.onlinebookstore.model.User;
 import com.example.onlinebookstore.repository.RoleRepository;
+import com.example.onlinebookstore.repository.ShoppingCartRepository;
 import com.example.onlinebookstore.repository.UserRepository;
 import com.example.onlinebookstore.service.UserService;
 import java.util.Collections;
@@ -22,6 +24,7 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final ShoppingCartRepository shoppingCartRepository;
 
     @Override
     public UserResponseDto save(
@@ -37,6 +40,9 @@ public class UserServiceImpl implements UserService {
                 () -> new IllegalStateException("Default role not found"));
         user.setRoles(Collections.singleton(defaultRole));
         User savedUser = userRepository.save(user);
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setUser(savedUser);
+        shoppingCartRepository.save(shoppingCart);
         return userMapper.toDto(savedUser);
     }
 }

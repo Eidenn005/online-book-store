@@ -14,3 +14,4 @@ public class UserLoginRequestDto {
     @Size(min = 8, max = 100)
     private String password;
 }
+

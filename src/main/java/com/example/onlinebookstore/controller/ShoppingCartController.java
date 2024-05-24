@@ -15,14 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Shopping cart management", description = "Endpoints for managing cart")
 @RestController
@@ -51,12 +44,15 @@ public class ShoppingCartController {
         return shoppingCartMapper.toDto(shoppingCart);
     }
 
-    @PutMapping("/cart-items/{cartItemId}")
+    @PutMapping("/cart-items/{id}")
     @PreAuthorize("hasRole('USER')")
-    public CartItemResponseDto updateCartItems(@Valid @RequestBody CartItemRequestDto requestDto,
-                                               Authentication authentication) {
+    public CartItemResponseDto updateCartItems(
+            @PathVariable Long id,
+            @Valid @RequestBody CartItemRequestDto requestDto,
+            Authentication authentication
+    ) {
         User user = (User) authentication.getPrincipal();
-        return cartItemService.updateBooksQuantity(requestDto, user);
+        return cartItemService.updateBooksQuantity(id, requestDto, user);
     }
 
     @DeleteMapping("/cart-items/{cartItemId}")

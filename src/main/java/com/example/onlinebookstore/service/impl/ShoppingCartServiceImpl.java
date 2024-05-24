@@ -6,6 +6,7 @@ import com.example.onlinebookstore.model.ShoppingCart;
 import com.example.onlinebookstore.model.User;
 import com.example.onlinebookstore.repository.ShoppingCartRepository;
 import com.example.onlinebookstore.service.ShoppingCartService;
+import jakarta.transaction.Transactional;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -19,6 +20,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ShoppingCartMapper shoppingCartMapper;
 
     @Override
+    @Transactional
     public ShoppingCartResponseDto getOrCreate(User user) {
         Optional<ShoppingCart> shoppingCart = shoppingCartRepository.findByUserId(user.getId());
         if (shoppingCart.isPresent()) {
@@ -32,18 +34,20 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
+    @Transactional
     public ShoppingCart findById(User user) {
         return shoppingCartRepository.findByUserId(user.getId())
                 .orElseGet(() -> createNewShoppingCartForUser(user));
     }
 
     @Override
+    @Transactional
     public ShoppingCartResponseDto save(ShoppingCart shoppingCart) {
         shoppingCart = shoppingCartRepository.save(shoppingCart);
         return shoppingCartMapper.toDto(shoppingCart);
     }
 
-    private ShoppingCart createNewShoppingCartForUser(User user) {
+    public ShoppingCart createNewShoppingCartForUser(User user) {
         ShoppingCart cart = new ShoppingCart();
         cart.setUser(user);
         return cart;

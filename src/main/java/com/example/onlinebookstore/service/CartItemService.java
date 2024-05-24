@@ -7,7 +7,7 @@ import com.example.onlinebookstore.model.User;
 public interface CartItemService {
     CartItemResponseDto add(CartItemRequestDto requestDto, User user);
 
-    CartItemResponseDto updateBooksQuantity(CartItemRequestDto requestDto, User user);
+    CartItemResponseDto updateBooksQuantity(Long id, CartItemRequestDto requestDto, User user);
 
     void delete(CartItemRequestDto requestDto);
 }

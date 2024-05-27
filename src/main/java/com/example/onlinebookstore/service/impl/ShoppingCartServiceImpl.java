@@ -5,6 +5,7 @@ import com.example.onlinebookstore.exception.EntityNotFoundException;
 import com.example.onlinebookstore.mapper.ShoppingCartMapper;
 import com.example.onlinebookstore.model.ShoppingCart;
 import com.example.onlinebookstore.model.User;
+import com.example.onlinebookstore.repository.CartItemRepository;
 import com.example.onlinebookstore.repository.ShoppingCartRepository;
 import com.example.onlinebookstore.service.ShoppingCartService;
 import jakarta.transaction.Transactional;
@@ -21,6 +22,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     private final ShoppingCartRepository shoppingCartRepository;
     private final ShoppingCartMapper shoppingCartMapper;
+    private final CartItemRepository cartItemRepository;
 
     @Override
     @Transactional
@@ -35,7 +37,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Transactional
     public ShoppingCart findByUserId(User user) {
         logger.info("Finding shopping cart for user ID: {}", user.getId());
-        Optional<ShoppingCart> shoppingCart = shoppingCartRepository.findCartByUserId(user.getId());
+        Optional<ShoppingCart> shoppingCart = shoppingCartRepository.findCartByUserId(user);
         if (shoppingCart.isPresent()) {
             return shoppingCart.get();
         } else {

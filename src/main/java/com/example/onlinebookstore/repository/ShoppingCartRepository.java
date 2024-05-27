@@ -1,9 +1,13 @@
 package com.example.onlinebookstore.repository;
 
 import com.example.onlinebookstore.model.ShoppingCart;
-import java.util.Optional;
+import com.example.onlinebookstore.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.Optional;
 
 public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Long> {
-    Optional<ShoppingCart> findCartByUserId(Long userId);
+    @Query("FROM ShoppingCart sc JOIN FETCH sc.cartItems WHERE sc.user = :user")
+    Optional<ShoppingCart> findCartByUserId(User user);
 }

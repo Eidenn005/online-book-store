@@ -3,8 +3,6 @@ package com.example.onlinebookstore.controller;
 import com.example.onlinebookstore.dto.CartItemRequestDto;
 import com.example.onlinebookstore.dto.CartItemResponseDto;
 import com.example.onlinebookstore.dto.ShoppingCartDto;
-import com.example.onlinebookstore.mapper.ShoppingCartMapper;
-import com.example.onlinebookstore.model.ShoppingCart;
 import com.example.onlinebookstore.model.User;
 import com.example.onlinebookstore.service.CartItemService;
 import com.example.onlinebookstore.service.ShoppingCartService;

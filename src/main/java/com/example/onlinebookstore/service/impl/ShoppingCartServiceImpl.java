@@ -19,8 +19,6 @@ import org.springframework.stereotype.Service;
 public class ShoppingCartServiceImpl implements ShoppingCartService {
     private static final Logger logger = LoggerFactory.getLogger(ShoppingCartServiceImpl.class);
 
-
-
     private final ShoppingCartRepository shoppingCartRepository;
     private final ShoppingCartMapper shoppingCartMapper;
 

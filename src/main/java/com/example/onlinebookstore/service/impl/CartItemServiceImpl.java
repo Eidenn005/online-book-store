@@ -30,7 +30,8 @@ public class CartItemServiceImpl implements CartItemService {
         ShoppingCart shoppingCart = shoppingCartService.findByUserId(user);
         CartItem cartItem = cartItemMapper.toEntity(requestDto);
         Book book = bookRepository.findById(requestDto.getBookId())
-                .orElseThrow(() -> new EntityNotFoundException("Book not found with id: " + requestDto.getBookId()));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Book not found with id: " + requestDto.getBookId()));
         cartItem.setBook(book);
         cartItem.setShoppingCart(shoppingCart);
         cartItemRepository.save(cartItem);
@@ -54,7 +55,8 @@ public class CartItemServiceImpl implements CartItemService {
     @Transactional
     public void delete(CartItemRequestDto requestDto) {
         if (cartItemRepository.existsById(requestDto.getBookId())) {
-            cartItemRepository.delete(cartItemRepository.findCartItemByBookId(requestDto.getBookId()));
+            cartItemRepository.delete(cartItemRepository
+                    .findCartItemByBookId(requestDto.getBookId()));
         }
     }
 }

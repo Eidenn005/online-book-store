@@ -5,7 +5,6 @@ import com.example.onlinebookstore.exception.EntityNotFoundException;
 import com.example.onlinebookstore.mapper.ShoppingCartMapper;
 import com.example.onlinebookstore.model.ShoppingCart;
 import com.example.onlinebookstore.model.User;
-import com.example.onlinebookstore.repository.CartItemRepository;
 import com.example.onlinebookstore.repository.ShoppingCartRepository;
 import com.example.onlinebookstore.service.ShoppingCartService;
 import jakarta.transaction.Transactional;

@@ -22,7 +22,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     private final ShoppingCartRepository shoppingCartRepository;
     private final ShoppingCartMapper shoppingCartMapper;
-    private final CartItemRepository cartItemRepository;
 
     @Override
     @Transactional

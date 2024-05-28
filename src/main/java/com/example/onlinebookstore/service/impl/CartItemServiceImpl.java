@@ -45,7 +45,11 @@ public class CartItemServiceImpl implements CartItemService {
             CartItemRequestDto requestDto,
             User user
     ) {
-        CartItem cartItem = cartItemRepository.findCartItemByBookId(requestDto.getBookId());
+        CartItem cartItem = cartItemRepository.findById(id)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("CartItem not found with id: " + id));
+
+        checkCartItemByUser(user, cartItem);
         cartItem.setQuantity(requestDto.getQuantity());
         cartItem = cartItemRepository.save(cartItem);
         return cartItemMapper.toDto(cartItem);
@@ -53,10 +57,19 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     @Transactional
-    public void delete(CartItemRequestDto requestDto) {
-        if (cartItemRepository.existsById(requestDto.getBookId())) {
-            cartItemRepository.delete(cartItemRepository
-                    .findCartItemByBookId(requestDto.getBookId()));
+    public void delete(Long id, User user) {
+        CartItem cartItem = cartItemRepository.findById(id)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("CartItem not found with id: " + id));
+
+        checkCartItemByUser(user, cartItem);
+
+        cartItemRepository.delete(cartItem);
+    }
+
+    private void checkCartItemByUser(User user, CartItem cartItem) {
+        if (!cartItem.getShoppingCart().getUser().getId().equals(user.getId())) {
+            throw new EntityNotFoundException("User: " + user + "do not have cartItem:" + cartItem);
         }
     }
 }

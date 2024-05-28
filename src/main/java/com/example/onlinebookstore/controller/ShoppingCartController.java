@@ -58,10 +58,13 @@ public class ShoppingCartController {
         return cartItemService.updateCartItemQuantity(id, requestDto, user);
     }
 
-    @DeleteMapping("/cart-items/{cartItemId}")
+    @DeleteMapping("/cart-items/{id}")
     @PreAuthorize("hasRole('USER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCartItem(@Valid @RequestBody CartItemRequestDto requestDto) {
-        cartItemService.delete(requestDto);
+    public void deleteCartItem(
+            @PathVariable Long id,
+            @AuthenticationPrincipal User user
+    ) {
+        cartItemService.delete(id, user);
     }
 }

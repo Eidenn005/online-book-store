@@ -26,7 +26,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     @Transactional
-    public ShoppingCartDto create(User user) {
+    public ShoppingCartDto createForUser(User user) {
         ShoppingCart newShoppingCart = new ShoppingCart();
         newShoppingCart.setUser(user);
         newShoppingCart = shoppingCartRepository.save(newShoppingCart);
@@ -37,7 +37,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Transactional
     public ShoppingCart findByUserId(User user) {
         logger.info("Finding shopping cart for user ID: {}", user.getId());
-        Optional<ShoppingCart> shoppingCart = shoppingCartRepository.findCartByUserId(user);
+        Optional<ShoppingCart> shoppingCart = shoppingCartRepository.findByUser(user);
         if (shoppingCart.isPresent()) {
             return shoppingCart.get();
         } else {
@@ -47,14 +47,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    @Transactional
-    public ShoppingCartDto save(ShoppingCart shoppingCart) {
-        shoppingCart = shoppingCartRepository.save(shoppingCart);
-        return shoppingCartMapper.toDto(shoppingCart);
-    }
-
-    @Override
-    @Transactional
     public ShoppingCartDto getCart(User user) {
         ShoppingCart cart = findByUserId(user);
         return shoppingCartMapper.toDto(cart);

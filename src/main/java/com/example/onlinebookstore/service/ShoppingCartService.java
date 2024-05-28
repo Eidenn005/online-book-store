@@ -6,11 +6,9 @@ import com.example.onlinebookstore.model.User;
 
 public interface ShoppingCartService {
 
-    ShoppingCartDto create(User user);
+    ShoppingCartDto createForUser(User user);
 
     ShoppingCart findByUserId(User user);
-
-    ShoppingCartDto save(ShoppingCart shoppingCart);
 
     ShoppingCartDto getCart(User user);
 }

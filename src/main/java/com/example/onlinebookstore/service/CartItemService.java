@@ -10,5 +10,5 @@ public interface CartItemService {
 
     CartItemResponseDto updateCartItemQuantity(Long id, CartItemRequestDto requestDto, User user);
 
-    void delete(CartItemRequestDto requestDto);
+    void delete(Long id, User user);
 }

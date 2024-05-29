@@ -8,7 +8,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: password
-                  value: "$2a$10$uTIysPZ0u7mKBhd8e1ifNuhgwob68OLTMS6YYPVjgNVQoGGdXvc8G"
+                  value: "$2a$10$VbQtqCsbuuh96cFjXUniWONe9s9BcG2AzhzNnLRS38yfIyZUuJ6tW"
               - column:
                   name: email
                   value: "adminn@gmail.com"

@@ -8,6 +8,7 @@ import com.example.onlinebookstore.model.Role;
 import com.example.onlinebookstore.model.User;
 import com.example.onlinebookstore.repository.RoleRepository;
 import com.example.onlinebookstore.repository.UserRepository;
+import com.example.onlinebookstore.service.ShoppingCartService;
 import com.example.onlinebookstore.service.UserService;
 import java.util.Collections;
 import java.util.Optional;
@@ -22,6 +23,7 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final ShoppingCartService shoppingCartService;
 
     @Override
     public UserResponseDto save(
@@ -37,6 +39,7 @@ public class UserServiceImpl implements UserService {
                 () -> new IllegalStateException("Default role not found"));
         user.setRoles(Collections.singleton(defaultRole));
         User savedUser = userRepository.save(user);
+        shoppingCartService.createForUser(savedUser);
         return userMapper.toDto(savedUser);
     }
 }

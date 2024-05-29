@@ -20,7 +20,7 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString(exclude = {"shoppingCart", "book"})
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(of = {"id", "quantity"})
 @Table(name = "cart_items")
 public class CartItem {
     @Id

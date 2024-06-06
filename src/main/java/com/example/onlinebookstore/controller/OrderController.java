@@ -61,9 +61,11 @@ public class OrderController {
 
     @PatchMapping("/{orderId}")
     @Operation(summary = "Update order status")
-    public OrderResponseDto updateOrderStatus(@AuthenticationPrincipal User user,
-                                              @PathVariable("orderId") Long orderId,
-                                              @Valid @RequestBody OrderStatusUpdateDto statusUpdateDto) {
+    public OrderResponseDto updateOrderStatus(
+            @AuthenticationPrincipal User user,
+            @PathVariable("orderId") Long orderId,
+            @Valid @RequestBody OrderStatusUpdateDto statusUpdateDto
+    ) {
         return orderService.updateOrderStatus(user, orderId, statusUpdateDto);
     }
 }

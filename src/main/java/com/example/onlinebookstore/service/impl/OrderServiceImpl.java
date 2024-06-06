@@ -109,7 +109,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderResponseDto updateOrderStatus(User user, Long orderId, OrderStatusUpdateDto statusUpdateDto) {
+    public OrderResponseDto updateOrderStatus(
+            User user,
+            Long orderId,
+            OrderStatusUpdateDto statusUpdateDto
+    ) {
         Order order = getOrderById(orderId);
         validateUserOrder(user, order);
         order.setStatus(statusUpdateDto.getStatus());
@@ -119,7 +123,9 @@ public class OrderServiceImpl implements OrderService {
 
     private void validateUserOrder(User user, Order order) {
         if (!order.getUser().getId().equals(user.getId())) {
-            throw new UnauthorizedAccessException("You do not have permission to access this order item");
+            throw new UnauthorizedAccessException(
+                    "You do not have permission to access this order item"
+            );
         }
     }
 

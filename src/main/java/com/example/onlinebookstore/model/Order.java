@@ -27,7 +27,7 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString(exclude = {"user", "orderItems"})
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(of = {"id", "status", "total", "orderDate", "shippingAddress"})
 @Table(name = "orders")
 public class Order {
     @Id

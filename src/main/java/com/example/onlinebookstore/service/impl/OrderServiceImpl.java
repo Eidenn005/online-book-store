@@ -5,6 +5,7 @@ import com.example.onlinebookstore.dto.OrderRequestDto;
 import com.example.onlinebookstore.dto.OrderResponseDto;
 import com.example.onlinebookstore.dto.OrderStatusUpdateDto;
 import com.example.onlinebookstore.exception.EntityNotFoundException;
+import com.example.onlinebookstore.exception.UnauthorizedAccessException;
 import com.example.onlinebookstore.mapper.OrderItemMapper;
 import com.example.onlinebookstore.mapper.OrderMapper;
 import com.example.onlinebookstore.model.Order;
@@ -23,6 +24,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,16 +37,35 @@ public class OrderServiceImpl implements OrderService {
     private final ShoppingCartService shoppingCartService;
 
     @Override
+    @Transactional
     public OrderResponseDto placeOrder(User user, OrderRequestDto orderRequestDto) {
         ShoppingCart cart = shoppingCartService.findByUserId(user);
 
         Order order = new Order();
         order.setUser(user);
-        order.setStatus(Status.PENDING); // Initial status is PENDING
+        order.setStatus(Status.PENDING);
         order.setOrderDate(LocalDateTime.now());
         order.setShippingAddress(orderRequestDto.getShippingAddress());
 
-        Set<OrderItem> orderItems = cart.getCartItems().stream()
+        Set<OrderItem> orderItems = getOrderItems(cart, order);
+        order.setOrderItems(orderItems);
+
+        BigDecimal total = calculateTotalPrice(orderItems);
+        order.setTotal(total);
+
+        Order savedOrder = orderRepository.save(order);
+        cart.getCartItems().clear();
+        return orderMapper.toDto(savedOrder);
+    }
+
+    private BigDecimal calculateTotalPrice(Set<OrderItem> orderItems) {
+        return orderItems.stream()
+                .map(OrderItem::getPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private Set<OrderItem> getOrderItems(ShoppingCart cart, Order order) {
+        return cart.getCartItems().stream()
                 .map(cartItem -> {
                     OrderItem orderItem = new OrderItem();
                     orderItem.setOrder(order);
@@ -55,18 +76,10 @@ public class OrderServiceImpl implements OrderService {
                     return orderItem;
                 })
                 .collect(Collectors.toSet());
-        order.setOrderItems(orderItems);
-
-        BigDecimal total = orderItems.stream()
-                .map(OrderItem::getPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        order.setTotal(total);
-
-        Order savedOrder = orderRepository.save(order);
-        return orderMapper.toDto(savedOrder);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<OrderResponseDto> getOrderHistory(User user) {
         List<Order> orders = orderRepository.findByUser(user);
         return orders.stream()
@@ -75,14 +88,19 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public OrderResponseDto getOrder(User user, Long orderId) {
         Order order = orderRepository.findByIdAndUser(orderId, user)
                 .orElseThrow(() -> new EntityNotFoundException("Order not found"));
+        validateUserOrder(user, order);
         return orderMapper.toDto(order);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public OrderItemResponseDto getOrderItem(User user, Long orderId, Long itemId) {
+        Order order = getOrderById(orderId);
+        validateUserOrder(user, order);
         OrderItem orderItem = orderItemRepository
                 .findByIdAndOrder_IdAndOrder_User(itemId, orderId, user)
                 .orElseThrow(() -> new EntityNotFoundException("Order item not found"));
@@ -90,11 +108,23 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderResponseDto updateOrderStatus(Long orderId, OrderStatusUpdateDto statusUpdateDto) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("Order not found"));
+    @Transactional
+    public OrderResponseDto updateOrderStatus(User user, Long orderId, OrderStatusUpdateDto statusUpdateDto) {
+        Order order = getOrderById(orderId);
+        validateUserOrder(user, order);
         order.setStatus(statusUpdateDto.getStatus());
         order = orderRepository.save(order);
         return orderMapper.toDto(order);
+    }
+
+    private void validateUserOrder(User user, Order order) {
+        if (!order.getUser().getId().equals(user.getId())) {
+            throw new UnauthorizedAccessException("You do not have permission to access this order item");
+        }
+    }
+
+    private Order getOrderById(Long orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new EntityNotFoundException("Order not found"));
     }
 }

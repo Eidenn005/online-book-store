@@ -8,6 +8,7 @@ import com.example.onlinebookstore.model.User;
 import com.example.onlinebookstore.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,7 @@ public class OrderController {
     @Operation(summary = "Place an order")
     @ResponseStatus(HttpStatus.CREATED)
     public OrderResponseDto placeOrder(@AuthenticationPrincipal User user,
-                                       @RequestBody OrderRequestDto orderRequestDto) {
+                                       @Valid @RequestBody OrderRequestDto orderRequestDto) {
         return orderService.placeOrder(user, orderRequestDto);
     }
 
@@ -60,8 +61,9 @@ public class OrderController {
 
     @PatchMapping("/{orderId}")
     @Operation(summary = "Update order status")
-    public OrderResponseDto updateOrderStatus(@PathVariable("orderId") Long orderId,
-                                              @RequestBody OrderStatusUpdateDto statusUpdateDto) {
-        return orderService.updateOrderStatus(orderId, statusUpdateDto);
+    public OrderResponseDto updateOrderStatus(@AuthenticationPrincipal User user,
+                                              @PathVariable("orderId") Long orderId,
+                                              @Valid @RequestBody OrderStatusUpdateDto statusUpdateDto) {
+        return orderService.updateOrderStatus(user, orderId, statusUpdateDto);
     }
 }

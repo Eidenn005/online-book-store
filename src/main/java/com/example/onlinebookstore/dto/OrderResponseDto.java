@@ -4,13 +4,9 @@ import com.example.onlinebookstore.model.Status;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 public class OrderResponseDto {
     private Long id;
     private Long userId;

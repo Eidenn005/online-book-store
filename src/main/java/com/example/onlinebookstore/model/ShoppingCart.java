@@ -42,5 +42,5 @@ public class ShoppingCart {
     private Set<CartItem> cartItems = new HashSet<>();
 
     @Column(nullable = false)
-    private boolean isDeleted;
+    private boolean isDeleted = false;
 }

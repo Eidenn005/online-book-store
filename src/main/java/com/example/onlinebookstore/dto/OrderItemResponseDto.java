@@ -1,13 +1,9 @@
 package com.example.onlinebookstore.dto;
 
 import java.math.BigDecimal;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 public class OrderItemResponseDto {
     private Long id;
     private Long bookId;

@@ -1,13 +1,9 @@
 package com.example.onlinebookstore.dto;
 
 import com.example.onlinebookstore.model.Status;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 public class OrderStatusUpdateDto {
     private Status status;
 }

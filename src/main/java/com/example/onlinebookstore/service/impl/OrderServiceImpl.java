@@ -15,6 +15,7 @@ import com.example.onlinebookstore.model.Status;
 import com.example.onlinebookstore.model.User;
 import com.example.onlinebookstore.repository.OrderItemRepository;
 import com.example.onlinebookstore.repository.OrderRepository;
+import com.example.onlinebookstore.repository.ShoppingCartRepository;
 import com.example.onlinebookstore.service.OrderService;
 import com.example.onlinebookstore.service.ShoppingCartService;
 import java.math.BigDecimal;
@@ -35,6 +36,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
     private final OrderItemMapper orderItemMapper;
     private final ShoppingCartService shoppingCartService;
+    private final ShoppingCartRepository shoppingCartRepository;
 
     @Override
     @Transactional
@@ -55,6 +57,7 @@ public class OrderServiceImpl implements OrderService {
 
         Order savedOrder = orderRepository.save(order);
         cart.getCartItems().clear();
+        shoppingCartRepository.save(cart);
         return orderMapper.toDto(savedOrder);
     }
 

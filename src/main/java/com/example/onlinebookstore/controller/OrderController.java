@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -60,6 +61,7 @@ public class OrderController {
     }
 
     @PatchMapping("/{orderId}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Update order status")
     public OrderResponseDto updateOrderStatus(
             @AuthenticationPrincipal User user,

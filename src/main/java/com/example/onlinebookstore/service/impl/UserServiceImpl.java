@@ -39,6 +39,7 @@ public class UserServiceImpl implements UserService {
                 () -> new IllegalStateException("Default role not found"));
         user.setRoles(Collections.singleton(defaultRole));
         User savedUser = userRepository.save(user);
+        shoppingCartService.createForUser(savedUser);
         return userMapper.toDto(savedUser);
     }
 }
